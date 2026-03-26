@@ -1,0 +1,7 @@
+experiments/
+*.pt
+*.pth
+*.zip
+*.jpg
+*.png
+__pycache__/

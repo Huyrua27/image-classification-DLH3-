@@ -1,0 +1,8 @@
+model:
+  name: vit_b_16
+
+data:
+  image_size: 224
+
+training:
+  lr: 0.0001

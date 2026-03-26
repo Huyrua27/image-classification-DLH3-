@@ -1,0 +1,8 @@
+model:
+  name: efficientnet_b2
+
+data:
+  image_size: 260
+
+training:
+  lr: 0.00025
