@@ -1,5 +1,5 @@
 # Fruit Image Classification Pipeline
-
+Link of Experiments on Drive (Checkpoint, Results, Notebook): https://drive.google.com/drive/u/1/folders/15UnGf6TsY0xUfFcNkIdnjw9Xeo2-lToa
 **Progress: 50% Complete** ✓
 
 This pipeline treats the task as 15-class classification:
