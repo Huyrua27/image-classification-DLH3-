@@ -4,35 +4,43 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>BTL 1 - Fruit Classification Report</title>
-  <meta name="description" content="Assignment 1 report page for Fruit Classification: EDA, dataset and dataloader preparation, augmentation, modeling, training, and experiment analysis.">
+  <meta name="description" content="Assignment 1 report page for Fruit Classification: EDA, dataset and dataloader preparation, augmentation, model training, evaluation, and interpretability.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assignment1_style.css">
 </head>
 <body>
+  <div class="bg-grid"></div>
   <div class="bg-glow bg-glow-a"></div>
   <div class="bg-glow bg-glow-b"></div>
 
   <header class="hero section reveal" id="top">
-    <p class="eyebrow">Deep Learning - Assignment 1</p>
+    <div class="hero-brand">
+      <img class="brand-logo" src="assets/images/branding/logo_bk.png" alt="University logo" loading="eager">
+      <div class="brand-meta">
+        <p class="eyebrow">Deep Learning Course - Major Project 1</p>
+        <p class="brand-sub">Computer Vision Report Page</p>
+      </div>
+    </div>
+
     <h1>Fruit Classification Report</h1>
     <p class="hero-lead">
-      This page summarizes the full <strong>fruit_classification</strong> project pipeline,
-      from EDA and dataset preparation to model comparison and experiment analysis.
+      A CVPR-style project page that summarizes the full <strong>fruit_classification</strong> pipeline,
+      from EDA and dataset processing to model benchmarking and interpretability analysis.
     </p>
 
     <div class="meta-grid">
       <div class="meta-card">
-        <span>Project name</span>
+        <span>Project</span>
         <strong>BTL 1 - Image Classification</strong>
       </div>
       <div class="meta-card">
-        <span>Student + Instructor</span>
+        <span>Author + Instructor</span>
         <strong>Tran Minh Huy | Instructor: (update name)</strong>
       </div>
       <div class="meta-card">
-        <span>Code repository</span>
+        <span>Repository</span>
         <strong>Huyrua27/image-classification-DLH3-</strong>
       </div>
       <div class="meta-card">
@@ -44,8 +52,8 @@
     <div class="cta-row">
       <a class="btn btn-primary" href="https://www.youtube.com/watch?v=REPLACE_WITH_DEMO_VIDEO" target="_blank" rel="noopener noreferrer">Demo Video</a>
       <a class="btn btn-primary" href="https://www.youtube.com/watch?v=REPLACE_WITH_REPORT_VIDEO" target="_blank" rel="noopener noreferrer">Presentation Video</a>
-      <a class="btn btn-outline" href="https://github.com/Huyrua27/image-classification-DLH3-" target="_blank" rel="noopener noreferrer">Code Link</a>
-      <a class="btn btn-outline" href="experiments/colab_run_4models_2modes.ipynb" target="_blank" rel="noopener noreferrer">Colab Notebook</a>
+      <a class="btn btn-outline" href="https://github.com/Huyrua27/image-classification-DLH3-" target="_blank" rel="noopener noreferrer">Code</a>
+      <a class="btn btn-outline" href="experiments/colab_run_4models_2modes.ipynb" target="_blank" rel="noopener noreferrer">Notebook</a>
     </div>
 
     <p class="note">Please update the two YouTube links before final submission.</p>
@@ -54,25 +62,25 @@
   <nav class="toc section reveal">
     <a href="#overview">Overview</a>
     <a href="#report-1">1. EDA</a>
-    <a href="#report-2">2. Dataset/Dataloader/Aug</a>
-    <a href="#report-3">3. Model & Training</a>
-    <a href="#report-4">4. Experiment Results</a>
-    <a href="#report-5">5. Extensions</a>
+    <a href="#report-2">2. Data Pipeline</a>
+    <a href="#report-3">3. Models & Training</a>
+    <a href="#report-4">4. Results</a>
+    <a href="#report-5">5. Interpretability</a>
   </nav>
 
   <main class="section-stack">
     <section class="section card reveal" id="overview">
-      <h2>Required Information For Assignment 1</h2>
-      <p>This page includes all mandatory links and report sections for the major project:</p>
+      <h2>Assignment 1 Required Information</h2>
+      <p>This page includes all mandatory elements for the major assignment:</p>
       <ul>
         <li><a href="https://www.youtube.com/watch?v=REPLACE_WITH_DEMO_VIDEO" target="_blank" rel="noopener noreferrer">Demo video link</a></li>
         <li><a href="https://www.youtube.com/watch?v=REPLACE_WITH_REPORT_VIDEO" target="_blank" rel="noopener noreferrer">YouTube presentation link</a></li>
-        <li><a href="https://github.com/Huyrua27/image-classification-DLH3-" target="_blank" rel="noopener noreferrer">Project code link</a></li>
-        <li><a href="#report-1">1. Problem study and EDA report</a></li>
+        <li><a href="https://github.com/Huyrua27/image-classification-DLH3-" target="_blank" rel="noopener noreferrer">Code repository link</a></li>
+        <li><a href="#report-1">1. Problem and EDA report</a></li>
         <li><a href="#report-2">2. Dataset, dataloader, and augmentation report</a></li>
         <li><a href="#report-3">3. Model building, training, evaluation, and comparison report</a></li>
-        <li><a href="#report-4">4. Experimental results report: metrics tables, charts, and discussion</a></li>
-        <li><a href="#report-5">5. Additional extension reports</a></li>
+        <li><a href="#report-4">4. Experimental tables, charts, analysis, and discussion</a></li>
+        <li><a href="#report-5">5. Extension report (interpretability)</a></li>
       </ul>
     </section>
 
@@ -81,7 +89,10 @@
       <p>
         The task is a 15-class image classification problem
         (<code>5 fruit types x 3 conditions</code>: Fresh, Rotten, Formalin-mixed).
-        Label naming format is <code>Fruit__Condition</code>.
+        Label naming follows <code>Fruit__Condition</code>.
+      </p>
+      <p>
+        Full EDA document: <a href="data/fruit_eda_report.pdf" target="_blank" rel="noopener noreferrer">fruit_eda_report.pdf</a>
       </p>
 
       <div class="stats-grid">
@@ -103,7 +114,70 @@
         </article>
       </div>
 
-      <h3>Class distribution (Fruits Original)</h3>
+      <h3>Dataset Size By Source</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Source</th>
+              <th>Images</th>
+              <th>Share of combined set</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Original</td><td>10,154</td><td>12.15%</td></tr>
+            <tr><td>Augmentation</td><td>73,389</td><td>87.85%</td></tr>
+            <tr class="best-row"><td>Total</td><td class="best-cell">83,543</td><td class="best-cell">100%</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Condition Distribution (Original vs Augmentation)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Condition</th>
+              <th>Original</th>
+              <th>Augmentation</th>
+              <th>Combined</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Fresh</td><td>3,800</td><td class="best-cell">30,400</td><td>34,200</td></tr>
+            <tr><td>Rotten</td><td>3,178</td><td>20,761</td><td>23,939</td></tr>
+            <tr><td>Formalin-mixed</td><td>3,176</td><td>22,228</td><td>25,404</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Fruit Distribution (Original vs Augmentation)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Fruit</th>
+              <th>Original</th>
+              <th>Augmentation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Apple</td><td>2,038</td><td>8,461</td></tr>
+            <tr><td>Banana</td><td>2,041</td><td>16,328</td></tr>
+            <tr><td>Grape</td><td>2,010</td><td>16,080</td></tr>
+            <tr><td>Mango</td><td>2,009</td><td>16,072</td></tr>
+            <tr><td>Orange</td><td>2,056</td><td class="best-cell">16,448</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="analysis">
+        EDA observation: the augmented dataset is much larger but not fully uniform across conditions.
+        The largest skew appears in <strong>Apple - Rotten</strong> (377 augmented samples),
+        while most other classes are in the 4,800-6,200 range.
+      </p>
+
+      <h3>Class Distribution (Original Only)</h3>
       <div class="table-wrap">
         <table>
           <thead>
@@ -132,7 +206,23 @@
         </table>
       </div>
 
-      <h3>Sample images from dataset</h3>
+      <h3>EDA Plots</h3>
+      <div class="eda-plot-grid">
+        <figure>
+          <img src="assets/images/eda/eda2.png" alt="Dataset distribution overview with split, condition, fruit, and storage source plots" loading="lazy">
+          <figcaption>Dataset distribution overview: split size, condition histogram, fruit counts, and storage source.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/images/eda/eda1.png" alt="Sampled image metadata plots for width height brightness and aspect ratio" loading="lazy">
+          <figcaption>Sampled image metadata: width, height, brightness, and aspect-ratio comparison.</figcaption>
+        </figure>
+        <figure class="wide-figure">
+          <img src="assets/images/eda/eda3.png" alt="Heatmaps of class counts by fruit and condition for original and augmentation data" loading="lazy">
+          <figcaption>Count heatmaps by fruit and condition (Original vs Augmentation).</figcaption>
+        </figure>
+      </div>
+
+      <h3>Dataset Samples</h3>
       <div class="sample-grid">
         <figure>
           <img src="assets/images/samples/apple_fresh.jpg" alt="Apple Fresh sample" loading="lazy">
@@ -170,10 +260,10 @@
     </section>
 
     <section class="section card reveal" id="report-2">
-      <h2>2. Dataset, Dataloader, And Augmentation Preparation</h2>
+      <h2>2. Dataset, Dataloader, And Augmentation Pipeline</h2>
       <p>
-        The dataset pipeline in <code>training/dataset.py</code> supports loading from both folders and <code>.zip</code> files,
-        then applies stratified splitting to preserve class distribution.
+        The pipeline in <code>training/dataset.py</code> supports loading data from both directories and <code>.zip</code> archives,
+        then applies stratified splitting to preserve class balance.
       </p>
 
       <div class="code-block">
@@ -183,8 +273,7 @@ splits = split_records(records, val_size=0.1, test_size=0.1, seed=42)</code></pr
       </div>
 
       <p>
-        The dataloader uses configurable batch size and workers from YAML config files.
-        Augmentations are implemented in <code>training/transforms.py</code>:
+        Dataloader settings come from YAML config, while augmentations in <code>training/transforms.py</code> include:
       </p>
       <ul>
         <li>RandomHorizontalFlip (default 0.5)</li>
@@ -198,9 +287,8 @@ splits = split_records(records, val_size=0.1, test_size=0.1, seed=42)</code></pr
     <section class="section card reveal" id="report-3">
       <h2>3. Model Building, Training, Evaluation, And Comparison</h2>
       <p>
-        Three backbones are compared: <strong>ResNet50</strong>, <strong>EfficientNet-B6</strong>, and <strong>ViT-B16</strong>.
-        Across 2 data modes (original/augmentation) and 3 fine-tuning strategies
-        (frozen, linear probe, finetune all), the pipeline runs <strong>15 experiments</strong>.
+        Three backbones are benchmarked: <strong>ResNet50</strong>, <strong>EfficientNet-B6</strong>, and <strong>ViT-B16</strong>.
+        Across 2 data modes and 3 fine-tuning strategies, the pipeline executes <strong>15 runs</strong>.
       </p>
 
       <div class="table-wrap">
@@ -214,8 +302,8 @@ splits = split_records(records, val_size=0.1, test_size=0.1, seed=42)</code></pr
           </thead>
           <tbody>
             <tr><td>ResNet50</td><td>224 x 224</td><td>CNN baseline</td></tr>
-            <tr><td>EfficientNet-B6</td><td>528 x 528</td><td class="best-cell">Best overall metrics</td></tr>
-            <tr><td>ViT-B16</td><td>224 x 224</td><td>Transformer backbone</td></tr>
+            <tr><td>EfficientNet-B6</td><td>528 x 528</td><td class="best-cell">Best overall performance</td></tr>
+            <tr><td>ViT-B16</td><td>224 x 224</td><td>Transformer baseline</td></tr>
           </tbody>
         </table>
       </div>
@@ -231,21 +319,21 @@ splits = split_records(records, val_size=0.1, test_size=0.1, seed=42)</code></pr
             </tr>
           </thead>
           <tbody>
-            <tr><td>Frozen</td><td>10</td><td>0.001</td><td>Backbone frozen, train classification head only</td></tr>
-            <tr><td>Linear Probe</td><td>15</td><td>0.01</td><td>Backbone frozen, stronger head optimization</td></tr>
+            <tr><td>Frozen</td><td>10</td><td>0.001</td><td>Train classifier head only</td></tr>
+            <tr><td>Linear Probe</td><td>15</td><td>0.01</td><td>Frozen backbone with stronger head update</td></tr>
             <tr><td class="best-cell">Finetune All</td><td class="best-cell">20</td><td class="best-cell">0.0001</td><td class="best-cell">Best strategy in this project</td></tr>
           </tbody>
         </table>
       </div>
 
       <p>
-        The training engine uses <code>CrossEntropyLoss</code> (label smoothing), <code>AdamW</code>,
-        <code>CosineAnnealingLR</code>, early stopping, and TensorBoard logging per batch/epoch.
+        Training uses <code>CrossEntropyLoss</code> with label smoothing, <code>AdamW</code>,
+        <code>CosineAnnealingLR</code>, early stopping, and TensorBoard logging.
       </p>
     </section>
 
     <section class="section card reveal" id="report-4">
-      <h2>4. Experimental Results: Tables, Charts, Analysis, Discussion</h2>
+      <h2>4. Experimental Results: Tables, Charts, And Discussion</h2>
 
       <div class="metric-highlight-grid">
         <article class="metric-card best">
@@ -265,7 +353,7 @@ splits = split_records(records, val_size=0.1, test_size=0.1, seed=42)</code></pr
         </article>
       </div>
 
-      <h3>Top configurations by test accuracy</h3>
+      <h3>Top Configurations By Test Accuracy</h3>
       <div class="table-wrap">
         <table>
           <thead>
@@ -288,7 +376,7 @@ splits = split_records(records, val_size=0.1, test_size=0.1, seed=42)</code></pr
         </table>
       </div>
 
-      <h3>Aggregated metrics</h3>
+      <h3>Aggregated Metrics</h3>
       <div class="table-wrap">
         <table>
           <thead>
@@ -320,7 +408,7 @@ splits = split_records(records, val_size=0.1, test_size=0.1, seed=42)</code></pr
         </figure>
         <figure>
           <img src="assets/images/reports/macro_f1_comparison.png" alt="Macro F1 comparison chart" loading="lazy">
-          <figcaption>Macro F1 comparison chart.</figcaption>
+          <figcaption>Macro F1 comparison by model, mode, and strategy.</figcaption>
         </figure>
         <figure>
           <img src="assets/images/reports/heatmap_mode_model.png" alt="Mode-model heatmap" loading="lazy">
@@ -332,30 +420,42 @@ splits = split_records(records, val_size=0.1, test_size=0.1, seed=42)</code></pr
         </figure>
         <figure>
           <img src="assets/images/reports/best_confusion_matrix.png" alt="Best run confusion matrix" loading="lazy">
-          <figcaption>Confusion matrix of the best run (EfficientNet-B6, finetune_all).</figcaption>
+          <figcaption>Confusion matrix of the best run (EfficientNet-B6 + finetune_all).</figcaption>
         </figure>
       </div>
 
       <p class="analysis">
-        Key takeaways: <strong>finetune_all</strong> consistently outperforms frozen and linear probe settings.
-        The augmentation mode improves average metrics, and EfficientNet-B6 gives the strongest overall performance.
+        Main finding: <strong>finetune_all</strong> clearly outperforms frozen and linear probe setups.
+        The augmentation mode boosts average metrics, and EfficientNet-B6 gives the strongest overall results.
       </p>
     </section>
 
     <section class="section card reveal" id="report-5">
-      <h2>5. Extension Reports</h2>
+      <h2>5. Extension Report: Interpretability (Grad-CAM & Attention Rollout)</h2>
       <p>
-        The repository also includes an interpretability module in <code>utils/visualization.py</code> with:
+        The project includes visual explanation tools from <code>utils/visualization.py</code>:
+        Grad-CAM for CNN models and Attention Rollout for ViT.
       </p>
+
+      <div class="figure-grid interpretability-grid">
+        <figure>
+          <img src="assets/images/interpretability/gradcam_resnet50.png" alt="Grad-CAM visualization for ResNet50" loading="lazy">
+          <figcaption>Grad-CAM - ResNet50</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/images/interpretability/gradcam_efficientnet_b6.png" alt="Grad-CAM visualization for EfficientNet-B6" loading="lazy">
+          <figcaption>Grad-CAM - EfficientNet-B6</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/images/interpretability/attention_rollout_vit_b16_final.png" alt="Attention rollout visualization for ViT-B16" loading="lazy">
+          <figcaption>Attention Rollout - ViT-B16</figcaption>
+        </figure>
+      </div>
+
       <ul>
-        <li>Grad-CAM for CNN backbones (ResNet, EfficientNet)</li>
-        <li>Attention Rollout for Vision Transformer (ViT)</li>
-      </ul>
-      <p>Suggested next extensions:</p>
-      <ul>
-        <li>Add an interpretability gallery with correct and failure cases</li>
-        <li>Add training/inference speed benchmark across backbones</li>
-        <li>Publish an online inference demo (Gradio/Spaces)</li>
+        <li>Grad-CAM highlights spatial regions that drive CNN predictions.</li>
+        <li>Attention Rollout visualizes important token regions in transformer inference.</li>
+        <li>These visuals improve model trust and support qualitative error analysis.</li>
       </ul>
     </section>
 
