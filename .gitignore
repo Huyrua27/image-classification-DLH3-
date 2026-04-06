@@ -7,3 +7,10 @@ experiments/
 __pycache__/
 # local dataset
 data/
+
+# Allow committed demo/report images for GitHub Pages
+!assets/
+!assets/images/
+!assets/images/**/*.png
+!assets/images/**/*.jpg
+!assets/images/**/*.jpeg

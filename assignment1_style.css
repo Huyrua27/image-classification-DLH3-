@@ -300,6 +300,53 @@ td {
   margin: 0.2rem 0;
 }
 
+.metric-highlight-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 0.8rem;
+}
+
+.metric-card {
+  border: 1px solid #d9cfbf;
+  background: #fffaf2;
+  border-radius: 12px;
+  padding: 0.75rem;
+}
+
+.metric-card span {
+  display: block;
+  font-size: 0.83rem;
+  color: #6d604b;
+}
+
+.metric-card strong {
+  display: block;
+  margin: 0.12rem 0;
+  font-size: 1.28rem;
+  color: #302513;
+}
+
+.metric-card small {
+  color: #6f6047;
+}
+
+.metric-card.best {
+  border-color: #db9e43;
+  background: linear-gradient(150deg, #fff2db 0%, #fffaef 100%);
+  box-shadow: inset 0 0 0 1px rgba(219, 158, 67, 0.25);
+}
+
+.best-row {
+  background: #fff7e8;
+}
+
+.best-cell {
+  font-weight: 700;
+  color: #73491a;
+  background: #fff3dc;
+}
+
 .figure-grid {
   margin-top: 0.95rem;
   display: grid;
@@ -324,6 +371,20 @@ figcaption {
   padding: 0.6rem 0.75rem;
   font-size: 0.9rem;
   color: #5f523d;
+}
+
+.sample-grid {
+  margin-top: 0.95rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.8rem;
+}
+
+.sample-grid img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  display: block;
 }
 
 .analysis {

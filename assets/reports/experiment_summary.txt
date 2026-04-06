@@ -1,0 +1,37 @@
+
+Experiment: Fruit Classification with Multiple Fine-tuning Strategies
+Date: 2026-04-06 13:40:45
+
+Configuration:
+  • Seed: 42
+  • Models: ResNet50, EfficientNet B6, ViT B16 (3 models)
+  • Modes: Original (no aug), Augmentation (2 modes)
+  • Fine-tuning Strategies: Frozen, Linear Probe, Fine-tune All (3 strategies)
+  • Total Training Runs: 15
+  • Test Set: Always Original (no augmentation)
+
+Key Results:
+  • Best Model: efficientnet_b6
+  • Best Mode: augmentation
+  • Best Fine-tuning: finetune_all
+  • Best Test Accuracy: 0.9993
+  • Best Test Macro F1: 0.9993
+
+Output Directories:
+  • Runs: /content/drive/MyDrive/fruit_classification/experiments/runs/20260325_3models_ft
+  • Reports: /content/drive/MyDrive/fruit_classification/experiments/runs/20260325_3models_ft/reports
+  • TensorBoard: tensorboard --logdir=/content/drive/MyDrive/fruit_classification/experiments/runs/20260325_3models_ft/*/tensorboard
+
+Generated Artifacts:
+  • all_results.csv: Complete results table
+  • all_history.csv: Training history for all models
+  • metrics_by_model.csv: Aggregated metrics by model
+  • metrics_by_mode.csv: Aggregated metrics by mode
+  • metrics_by_finetuning.csv: Aggregated metrics by strategy
+  • top_configurations.csv: Top 10 best configurations
+  • training_curves.png: Training curves by model/mode/strategy
+  • accuracy_comparison.png: Accuracy comparison charts
+  • macro_f1_comparison.png: Macro F1 comparison charts
+  • heatmap_mode_model.png: Mode x Model heatmap
+  • heatmap_finetuning_model.png: Fine-tuning x Model heatmap
+  • confusion_matrix_grid.png: All confusion matrices
