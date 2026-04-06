@@ -8,6 +8,7 @@ import numpy as np
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
+from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 
 from fruit_classification.utils.artifacts import save_confusion_matrix, save_history_csv, save_json
@@ -47,13 +48,15 @@ def train_one_epoch(
     criterion: nn.Module,
     optimizer: torch.optim.Optimizer,
     device: torch.device,
+    writer: SummaryWriter | None = None,
+    epoch: int = 0,
 ) -> dict[str, float]:
     model.train()
     running_loss = 0.0
     total = 0
     correct = 0
 
-    for batch in tqdm(loader, desc="train", leave=False):
+    for batch_idx, batch in enumerate(tqdm(loader, desc="train", leave=False)):
         images, labels = _move_batch(batch, device)
         optimizer.zero_grad(set_to_none=True)
         logits = model(images)
@@ -66,6 +69,11 @@ def train_one_epoch(
         total += labels.size(0)
         correct += (preds == labels).sum().item()
 
+        # TensorBoard logging
+        if writer is not None:
+            global_step = epoch * len(loader) + batch_idx
+            writer.add_scalar("train/batch_loss", loss.item(), global_step)
+
     return {"loss": running_loss / max(total, 1), "accuracy": correct / max(total, 1)}
 
 
@@ -76,6 +84,9 @@ def evaluate(
     criterion: nn.Module,
     device: torch.device,
     class_names: list[str],
+    writer: SummaryWriter | None = None,
+    epoch: int = 0,
+    prefix: str = "val",
 ) -> dict[str, Any]:
     model.eval()
     running_loss = 0.0
@@ -101,6 +112,14 @@ def evaluate(
     metrics["loss"] = running_loss / max(total, 1)
     if probs:
         metrics.update(summarize_probabilities(np.concatenate(probs, axis=0)))
+
+    # TensorBoard logging
+    if writer is not None:
+        writer.add_scalar(f"{prefix}/loss", metrics["loss"], epoch)
+        writer.add_scalar(f"{prefix}/accuracy", metrics["accuracy"], epoch)
+        writer.add_scalar(f"{prefix}/macro_f1", metrics["macro_f1"], epoch)
+        writer.add_scalar(f"{prefix}/weighted_f1", metrics["weighted_f1"], epoch)
+
     return metrics
 
 
@@ -124,6 +143,11 @@ def run_training(
     early_stopping = int(config["training"].get("early_stopping_patience", 0))
     monitor_metric = config["training"].get("monitor_metric", "macro_f1")
 
+    # TensorBoard setup
+    tb_dir = run_dir / "tensorboard"
+    tb_dir.mkdir(parents=True, exist_ok=True)
+    writer = SummaryWriter(str(tb_dir))
+
     history: list[dict[str, Any]] = []
     best_score = float("-inf")
     best_epoch = -1
@@ -132,8 +156,8 @@ def run_training(
 
     for epoch in range(1, epochs + 1):
         start_time = time.time()
-        train_metrics = train_one_epoch(model, dataloaders["train"], criterion, optimizer, device)
-        val_metrics = evaluate(model, dataloaders["val"], criterion, device, class_names)
+        train_metrics = train_one_epoch(model, dataloaders["train"], criterion, optimizer, device, writer, epoch)
+        val_metrics = evaluate(model, dataloaders["val"], criterion, device, class_names, writer, epoch, "val")
         if scheduler is not None:
             scheduler.step()
 
@@ -156,7 +180,6 @@ def run_training(
             "train_loss={train_loss:.4f} train_acc={train_accuracy:.4f} | "
             "val_loss={val_loss:.4f} val_acc={val_accuracy:.4f} val_macro_f1={val_macro_f1:.4f} | "
             "lr={lr:.6f} time={elapsed_sec:.1f}s".format(
-                epoch=epoch,
                 epochs=epochs,
                 **epoch_log,
             )
@@ -190,7 +213,7 @@ def run_training(
 
     checkpoint = torch.load(best_checkpoint_path, map_location=device)
     model.load_state_dict(checkpoint["model_state_dict"])
-    test_metrics = evaluate(model, dataloaders["test"], criterion, device, class_names)
+    test_metrics = evaluate(model, dataloaders["test"], criterion, device, class_names, writer, epochs, "test")
 
     save_history_csv(history, run_dir / "history.csv")
     save_json(
@@ -209,6 +232,8 @@ def run_training(
         run_dir / "confusion_matrix_test.png",
         title="Test Confusion Matrix",
     )
+
+    writer.close()
 
     return {
         "best_epoch": best_epoch,

@@ -1,0 +1,49 @@
+# Fine-tuning strategy options for pretrained models
+# Include this in your model config to specify a fine-tuning approach
+
+seed: 42
+
+experiment:
+  name: image_classification
+
+data:
+  data_root: fruit_classification/data
+  variant: original
+  limit_per_class: null
+  image_size: 224
+  split:
+    val_size: 0.1
+    test_size: 0.1
+  loader:
+    batch_size: 16
+    num_workers: 0
+    pin_memory: false
+  train_augmentation:
+    enabled: false
+    horizontal_flip_prob: 0.5
+    rotation_degrees: 15
+    brightness: 0.2
+    contrast: 0.2
+    saturation: 0.2
+    hue: 0.05
+    resized_crop_scale: [0.8, 1.0]
+    resized_crop_ratio: [0.9, 1.1]
+
+model:
+  name: resnet50
+  pretrained: true
+  strict_pretrained: false
+  # Fine-tuning strategy: frozen, linear_probe, gradual_unfreezing
+  fine_tuning_strategy: frozen
+  freeze_backbone: true  # For 'frozen' strategy
+
+training:
+  device: auto
+  epochs: 10
+  lr: 0.001
+  optimizer: adamw
+  scheduler: cosine
+  weight_decay: 0.0001
+  label_smoothing: 0.1
+  monitor_metric: macro_f1
+  early_stopping_patience: 3

@@ -5,3 +5,5 @@ experiments/
 *.jpg
 *.png
 __pycache__/
+# local dataset
+data/

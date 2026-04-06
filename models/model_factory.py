@@ -7,10 +7,12 @@ import torch.nn as nn
 from torchvision.models import (
     EfficientNet_B0_Weights,
     EfficientNet_B2_Weights,
+    EfficientNet_B6_Weights,
     ResNet50_Weights,
     ViT_B_16_Weights,
     efficientnet_b0,
     efficientnet_b2,
+    efficientnet_b6,
     resnet50,
     vit_b_16,
 )
@@ -20,6 +22,7 @@ SUPPORTED_MODELS = {
     "resnet50",
     "efficientnet_b0",
     "efficientnet_b2",
+    "efficientnet_b6",
     "vit_b_16",
     "deit_small_patch16_224",
 }
@@ -29,7 +32,7 @@ def _replace_classifier(model: nn.Module, model_name: str, num_classes: int) -> 
     if model_name == "resnet50":
         model.fc = nn.Linear(model.fc.in_features, num_classes)
         return model
-    if model_name in {"efficientnet_b0", "efficientnet_b2"}:
+    if model_name in {"efficientnet_b0", "efficientnet_b2", "efficientnet_b6"}:
         in_features = model.classifier[-1].in_features
         model.classifier[-1] = nn.Linear(in_features, num_classes)
         return model
@@ -52,7 +55,7 @@ def _freeze_backbone(model: nn.Module, model_name: str) -> None:
         for param in model.fc.parameters():
             param.requires_grad = True
         return
-    if model_name in {"efficientnet_b0", "efficientnet_b2"}:
+    if model_name in {"efficientnet_b0", "efficientnet_b2", "efficientnet_b6"}:
         for param in model.classifier.parameters():
             param.requires_grad = True
         return
@@ -85,6 +88,9 @@ def create_model(config: dict[str, Any], num_classes: int) -> nn.Module:
         elif model_name == "efficientnet_b2":
             weights = EfficientNet_B2_Weights.DEFAULT if pretrained else None
             model = efficientnet_b2(weights=weights)
+        elif model_name == "efficientnet_b6":
+            weights = EfficientNet_B6_Weights.DEFAULT if pretrained else None
+            model = efficientnet_b6(weights=weights)
         elif model_name == "vit_b_16":
             weights = ViT_B_16_Weights.DEFAULT if pretrained else None
             model = vit_b_16(weights=weights)
@@ -99,6 +105,8 @@ def create_model(config: dict[str, Any], num_classes: int) -> nn.Module:
             model = efficientnet_b0(weights=None)
         elif model_name == "efficientnet_b2":
             model = efficientnet_b2(weights=None)
+        elif model_name == "efficientnet_b6":
+            model = efficientnet_b6(weights=None)
         elif model_name == "vit_b_16":
             model = vit_b_16(weights=None)
         else:

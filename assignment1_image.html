@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BTL 1 - Fruit Classification Report</title>
+  <meta name="description" content="Trang báo cáo BTL 1 - Fruit Classification: EDA, Dataset/Dataloader/Augmentation, xây dựng mô hình, huấn luyện, đánh giá và kết quả thực nghiệm.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assignment1_style.css">
+</head>
+<body>
+  <div class="bg-glow bg-glow-a"></div>
+  <div class="bg-glow bg-glow-b"></div>
+
+  <header class="hero section reveal" id="top">
+    <p class="eyebrow">Deep Learning - BTL 1</p>
+    <h1>Fruit Classification Report</h1>
+    <p class="hero-lead">
+      Trang tổng hợp kết quả project <strong>fruit_classification</strong>, gồm toàn bộ phần trình bày từ EDA đến so sánh mô hình và phân tích kết quả thực nghiệm.
+    </p>
+
+    <div class="meta-grid">
+      <div class="meta-card">
+        <span>Ten bai tap lon</span>
+        <strong>BTL 1 - Image Classification</strong>
+      </div>
+      <div class="meta-card">
+        <span>Thanh vien + Giang vien</span>
+        <strong>Tran Minh Huy | GV: (cap nhat ten giang vien)</strong>
+      </div>
+      <div class="meta-card">
+        <span>Repo code</span>
+        <strong>Huyrua27/image-classification-DLH3-</strong>
+      </div>
+      <div class="meta-card">
+        <span>Ngay cap nhat</span>
+        <strong>06/04/2026</strong>
+      </div>
+    </div>
+
+    <div class="cta-row">
+      <a class="btn btn-primary" href="https://www.youtube.com/watch?v=REPLACE_WITH_DEMO_VIDEO" target="_blank" rel="noopener noreferrer">Video Demo</a>
+      <a class="btn btn-primary" href="https://www.youtube.com/watch?v=REPLACE_WITH_REPORT_VIDEO" target="_blank" rel="noopener noreferrer">Video Bao Cao (YouTube)</a>
+      <a class="btn btn-outline" href="https://github.com/Huyrua27/image-classification-DLH3-" target="_blank" rel="noopener noreferrer">Link Code</a>
+      <a class="btn btn-outline" href="experiments/colab_run_4models_2modes.ipynb" target="_blank" rel="noopener noreferrer">Notebook Chay Thu</a>
+    </div>
+
+    <p class="note">Luu y: vui long cap nhat 2 link YouTube o tren truoc khi nop/cham.</p>
+  </header>
+
+  <nav class="toc section reveal">
+    <a href="#overview">Tong quan</a>
+    <a href="#report-1">1. EDA</a>
+    <a href="#report-2">2. Dataset/Dataloader/Aug</a>
+    <a href="#report-3">3. Model va Training</a>
+    <a href="#report-4">4. Ket qua thuc nghiem</a>
+    <a href="#report-5">5. Mo rong</a>
+  </nav>
+
+  <main class="section-stack">
+    <section class="section card reveal" id="overview">
+      <h2>Thong Tin Bat Buoc Cua BTL 1</h2>
+      <p>Trang nay da bo tri day du cac lien ket can co cho bai tap lon so 1:</p>
+      <ul>
+        <li><a href="https://www.youtube.com/watch?v=REPLACE_WITH_DEMO_VIDEO" target="_blank" rel="noopener noreferrer">Link video demo bai tap</a></li>
+        <li><a href="https://www.youtube.com/watch?v=REPLACE_WITH_REPORT_VIDEO" target="_blank" rel="noopener noreferrer">Link video trinh bay bao cao (YouTube)</a></li>
+        <li><a href="https://github.com/Huyrua27/image-classification-DLH3-" target="_blank" rel="noopener noreferrer">Link code bai tap</a></li>
+        <li><a href="#report-1">Noi dung trinh bay 1: Bai toan + EDA</a></li>
+        <li><a href="#report-2">Noi dung trinh bay 2: Dataset, Dataloader, Augmentation</a></li>
+        <li><a href="#report-3">Noi dung trinh bay 3: Xay dung, huan luyen, danh gia va so sanh mo hinh</a></li>
+        <li><a href="#report-4">Noi dung trinh bay 4: Bang so lieu, bieu do, phan tich va thao luan</a></li>
+        <li><a href="#report-5">Noi dung trinh bay 5: Bao cao mo rong</a></li>
+      </ul>
+    </section>
+
+    <section class="section card reveal" id="report-1">
+      <h2>1. Bao Cao Tim Hieu Bai Toan Va Tap Du Lieu (EDA)</h2>
+      <p>
+        Bai toan duoc thiet ke la phan loai da lop anh trai cay theo 15 lop
+        (<code>5 loai trai cay x 3 tinh trang</code>: Fresh, Rotten, Formalin-mixed).
+        Nhan duoc quy uoc theo dinh dang <code>Fruit__Condition</code>.
+      </p>
+
+      <div class="stats-grid">
+        <article class="stat">
+          <span>So lop</span>
+          <strong>15</strong>
+        </article>
+        <article class="stat">
+          <span>Tong anh (Fruits Original)</span>
+          <strong>10,154</strong>
+        </article>
+        <article class="stat">
+          <span>Split Original</span>
+          <strong>Train 8,123 | Val 1,015 | Test 1,016</strong>
+        </article>
+        <article class="stat">
+          <span>Split Augmentation run</span>
+          <strong>Train 58,711 | Val 7,339 | Test 7,339</strong>
+        </article>
+      </div>
+
+      <h3>Phan bo mau theo tung lop (Fruits Original)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Lop</th>
+              <th>So anh</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Apple__Fresh</td><td>765</td></tr>
+            <tr><td>Apple__Rotten</td><td>630</td></tr>
+            <tr><td>Apple__Formalin-mixed</td><td>643</td></tr>
+            <tr><td>Banana__Fresh</td><td>749</td></tr>
+            <tr><td>Banana__Rotten</td><td>632</td></tr>
+            <tr><td>Banana__Formalin-mixed</td><td>660</td></tr>
+            <tr><td>Grape__Fresh</td><td>770</td></tr>
+            <tr><td>Grape__Rotten</td><td>630</td></tr>
+            <tr><td>Grape__Formalin-mixed</td><td>610</td></tr>
+            <tr><td>Mango__Fresh</td><td>763</td></tr>
+            <tr><td>Mango__Rotten</td><td>630</td></tr>
+            <tr><td>Mango__Formalin-mixed</td><td>616</td></tr>
+            <tr><td>Orange__Fresh</td><td>753</td></tr>
+            <tr><td>Orange__Rotten</td><td>656</td></tr>
+            <tr><td>Orange__Formalin-mixed</td><td>647</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section card reveal" id="report-2">
+      <h2>2. Bao Cao Chuan Bi Dataset, Dataloader Va Augmentation</h2>
+      <p>
+        Pipeline dataset trong <code>training/dataset.py</code> ho tro doc du lieu tu thu muc va file <code>.zip</code>,
+        sau do chia tap du lieu bang <code>stratified split</code> de giu phan bo lop on dinh.
+      </p>
+
+      <div class="code-block">
+<pre><code>variant = "original" | "augmentation" | "combined"
+records = collect_records(data_root, variant)
+splits = split_records(records, val_size=0.1, test_size=0.1, seed=42)</code></pre>
+      </div>
+
+      <p>
+        Dataloader su dung cau hinh batch-size va worker tu file config. Phan augmentation duoc quan ly tai
+        <code>training/transforms.py</code>, gom cac phep bien doi:
+      </p>
+      <ul>
+        <li>RandomHorizontalFlip (mac dinh 0.5)</li>
+        <li>RandomRotation (mac dinh 15 do)</li>
+        <li>ColorJitter (brightness/contrast/saturation/hue)</li>
+        <li>RandomResizedCrop (scale 0.8-1.0, ratio 0.9-1.1)</li>
+        <li>Normalize theo mean/std ImageNet</li>
+      </ul>
+    </section>
+
+    <section class="section card reveal" id="report-3">
+      <h2>3. Bao Cao Xay Dung, Huan Luyen, Danh Gia Va So Sanh Mo Hinh</h2>
+      <p>
+        Cac backbone duoc su dung: <strong>ResNet50</strong>, <strong>EfficientNet-B6</strong>, <strong>ViT-B16</strong>.
+        Qua 2 mode du lieu (original/augmentation) va 3 chien luoc fine-tuning
+        (frozen, linear probe, finetune all), tong cong <strong>15 run</strong>.
+      </p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Model</th>
+              <th>Kich thuoc input</th>
+              <th>Ghi chu</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>ResNet50</td><td>224 x 224</td><td>CNN baseline</td></tr>
+            <tr><td>EfficientNet-B6</td><td>528 x 528</td><td>Model dat ket qua cao nhat</td></tr>
+            <tr><td>ViT-B16</td><td>224 x 224</td><td>Transformer backbone</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Fine-tuning</th>
+              <th>Epochs</th>
+              <th>LR</th>
+              <th>Mo ta</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Frozen</td><td>10</td><td>0.001</td><td>Khoa backbone, train classifier head</td></tr>
+            <tr><td>Linear Probe</td><td>15</td><td>0.01</td><td>Khoa backbone, day manh head</td></tr>
+            <tr><td>Finetune All</td><td>20</td><td>0.0001</td><td>Mo toan bo tham so de toi uu</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Training engine dung <code>CrossEntropyLoss</code> (co label smoothing), optimizer <code>AdamW</code>,
+        scheduler <code>CosineAnnealingLR</code>, early stopping, va ghi log TensorBoard theo epoch/batch.
+      </p>
+    </section>
+
+    <section class="section card reveal" id="report-4">
+      <h2>4. Bao Cao Ket Qua Thuc Nghiem: Bang So Lieu, Bieu Do, Phan Tich</h2>
+
+      <div class="result-highlight">
+        <p><strong>Best configuration:</strong> augmentation + efficientnet_b6 + finetune_all</p>
+        <p><strong>Test Accuracy:</strong> 99.93% | <strong>Macro F1:</strong> 99.93% | <strong>Weighted F1:</strong> 99.93%</p>
+      </div>
+
+      <h3>Top cau hinh theo test_accuracy</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Mode</th>
+              <th>Model</th>
+              <th>Fine-tuning</th>
+              <th>Accuracy</th>
+              <th>Macro F1</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>augmentation</td><td>efficientnet_b6</td><td>finetune_all</td><td>99.93%</td><td>99.93%</td></tr>
+            <tr><td>2</td><td>augmentation</td><td>resnet50</td><td>finetune_all</td><td>99.74%</td><td>99.26%</td></tr>
+            <tr><td>3</td><td>augmentation</td><td>vit_b16</td><td>finetune_all</td><td>99.73%</td><td>99.18%</td></tr>
+            <tr><td>4</td><td>original</td><td>efficientnet_b6</td><td>finetune_all</td><td>99.61%</td><td>99.60%</td></tr>
+            <tr><td>5</td><td>original</td><td>resnet50</td><td>finetune_all</td><td>98.43%</td><td>98.45%</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Thong ke tong hop</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Nhom</th>
+              <th>Gia tri trung binh accuracy</th>
+              <th>Gia tri trung binh macro F1</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Model: efficientnet_b6</td><td>96.64%</td><td>96.15%</td></tr>
+            <tr><td>Model: resnet50</td><td>94.64%</td><td>93.97%</td></tr>
+            <tr><td>Model: vit_b16</td><td>95.06%</td><td>94.75%</td></tr>
+            <tr><td>Mode: augmentation</td><td>96.55%</td><td>95.28%</td></tr>
+            <tr><td>Mode: original</td><td>94.71%</td><td>94.74%</td></tr>
+            <tr><td>Finetuning: finetune_all</td><td>98.80%</td><td>98.64%</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="figure-grid">
+        <figure>
+          <img src="experiments/runs/20260325_3models_ft/reports/training_curves.png" alt="Training curves tong hop" loading="lazy">
+          <figcaption>Duong cong training/validation cho cac run.</figcaption>
+        </figure>
+        <figure>
+          <img src="experiments/runs/20260325_3models_ft/reports/accuracy_comparison.png" alt="So sanh accuracy" loading="lazy">
+          <figcaption>Bieu do so sanh accuracy giua model/mode/fine-tuning.</figcaption>
+        </figure>
+        <figure>
+          <img src="experiments/runs/20260325_3models_ft/reports/macro_f1_comparison.png" alt="So sanh macro f1" loading="lazy">
+          <figcaption>Bieu do so sanh macro F1.</figcaption>
+        </figure>
+        <figure>
+          <img src="experiments/runs/20260325_3models_ft/reports/heatmap_mode_model.png" alt="Heatmap mode va model" loading="lazy">
+          <figcaption>Heatmap trung binh metric theo mode va model.</figcaption>
+        </figure>
+        <figure>
+          <img src="experiments/runs/20260325_3models_ft/reports/heatmap_finetuning_model.png" alt="Heatmap finetuning va model" loading="lazy">
+          <figcaption>Heatmap trung binh metric theo strategy va model.</figcaption>
+        </figure>
+        <figure>
+          <img src="experiments/runs/20260325_3models_ft/augmentation__efficientnet_b6__finetune_all/confusion_matrix_test.png" alt="Confusion matrix best run" loading="lazy">
+          <figcaption>Confusion matrix cua best run (efficientnet_b6 finetune_all).</figcaption>
+        </figure>
+      </div>
+
+      <p class="analysis">
+        Nhan xet nhanh: chien luoc <strong>finetune_all</strong> vuot troi so voi frozen va linear_probe.
+        Du lieu augmentation giup tang trung binh metric, dac biet khi ket hop backbone EfficientNet-B6.
+        Cac lop trong best run dat precision/recall rat cao, loi chu yeu tap trung o mot vai lop nho.
+      </p>
+    </section>
+
+    <section class="section card reveal" id="report-5">
+      <h2>5. Cac Bao Cao Mo Rong</h2>
+      <p>
+        Repo da bo sung module giai thich mo hinh trong <code>utils/visualization.py</code>
+        voi hai huong chinh:
+      </p>
+      <ul>
+        <li>Grad-CAM cho CNN (ResNet, EfficientNet)</li>
+        <li>Attention Rollout cho Vision Transformer (ViT)</li>
+      </ul>
+      <p>
+        Mo rong tiep theo de hoan thien trang bao cao:
+      </p>
+      <ul>
+        <li>Bo sung gallery anh interpretability va phan tich tung case dung/sai</li>
+        <li>Them benchmark thoi gian train/suy dien tren tung backbone</li>
+        <li>Tich hop demo inference online (Gradio/Spaces) cho video demo</li>
+      </ul>
+    </section>
+
+    <section class="section card reveal">
+      <h2>Link Artifact Truc Tiep</h2>
+      <ul>
+        <li><a href="experiments/runs/20260325_3models_ft/reports/all_results.csv" target="_blank" rel="noopener noreferrer">all_results.csv</a></li>
+        <li><a href="experiments/runs/20260325_3models_ft/reports/top_configurations.csv" target="_blank" rel="noopener noreferrer">top_configurations.csv</a></li>
+        <li><a href="experiments/runs/20260325_3models_ft/reports/metrics_by_model.csv" target="_blank" rel="noopener noreferrer">metrics_by_model.csv</a></li>
+        <li><a href="experiments/runs/20260325_3models_ft/reports/metrics_by_mode.csv" target="_blank" rel="noopener noreferrer">metrics_by_mode.csv</a></li>
+        <li><a href="experiments/runs/20260325_3models_ft/reports/metrics_by_finetuning.csv" target="_blank" rel="noopener noreferrer">metrics_by_finetuning.csv</a></li>
+        <li><a href="experiments/runs/20260325_3models_ft/reports/experiment_summary.txt" target="_blank" rel="noopener noreferrer">experiment_summary.txt</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="section footer reveal">
+    <p>BTL 1 - Fruit Classification | Repository: Huyrua27/image-classification-DLH3-</p>
+    <p><a href="#top">Quay lai dau trang</a></p>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+  </script>
+</body>
+</html>

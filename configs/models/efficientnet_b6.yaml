@@ -1,0 +1,8 @@
+model:
+  name: efficientnet_b6
+
+data:
+  image_size: 528
+
+training:
+  lr: 0.0001
